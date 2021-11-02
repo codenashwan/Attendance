@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2021 at 01:53 AM
+-- Generation Time: Nov 02, 2021 at 02:34 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.10
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `atendance`
+-- Table structure for table `attendance`
 --
 
-CREATE TABLE `atendance` (
+CREATE TABLE `attendance` (
   `id` int(11) NOT NULL,
   `id_student` int(11) NOT NULL,
   `id_subject` int(11) NOT NULL,
@@ -131,9 +131,9 @@ INSERT INTO `subjects` (`id`, `id_department`, `id_stage`, `name`, `created_at`,
 --
 
 --
--- Indexes for table `atendance`
+-- Indexes for table `attendance`
 --
-ALTER TABLE `atendance`
+ALTER TABLE `attendance`
   ADD PRIMARY KEY (`id`),
   ADD KEY `student` (`id_student`);
 
@@ -169,10 +169,10 @@ ALTER TABLE `subjects`
 --
 
 --
--- AUTO_INCREMENT for table `atendance`
+-- AUTO_INCREMENT for table `attendance`
 --
-ALTER TABLE `atendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+ALTER TABLE `attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -203,9 +203,9 @@ ALTER TABLE `subjects`
 --
 
 --
--- Constraints for table `atendance`
+-- Constraints for table `attendance`
 --
-ALTER TABLE `atendance`
+ALTER TABLE `attendance`
   ADD CONSTRAINT `student` FOREIGN KEY (`id_student`) REFERENCES `students` (`id`);
 
 --
