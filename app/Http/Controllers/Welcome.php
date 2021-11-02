@@ -66,7 +66,7 @@ class Welcome extends Component
             ['id_stage' , $this->stage],
             ['id_class' , $this->class],
             ['id_time' , $this->time]
-            ])->get();
+            ])->orderBy('name')->get();
         return view('welcome')->extends('layouts.app');
     }
 }
