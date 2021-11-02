@@ -11,23 +11,30 @@ use App\Models\attendance;
 use DB;
 class Welcome extends Component
 {
-    public $stages = [1,2,3,4] , $departments = [],$subjects = [],$classes = ['A','B','C','D'],$times = [['name' => 'Morning' ,'id' => 1] , ['name' => 'Evening','id' => 2]],$students = [];
-    public $stage,$department,$subject,$class,$time;
+    public $departments = [],$subjects = [],$students = [];
+    public $stages = [
+        ['id' => 1,'name' => '1'],
+        ['id' => 2,'name' => '2'],
+        ['id' => 3,'name' => '3'],
+        ['id' => 4,'name' => '4']
+    ];
+    public $classes =[
+        ['id' => 'A','name' => 'A'],
+        ['id' => 'B','name' => 'B'],
+        ['id' => 'C','name' => 'C'],
+        ['id' => 'D','name' => 'D'],
+    ];
+    public $times = [
+        ['name' => 'Morning' ,'id' => 1],
+        ['name' => 'Evening','id' => 2]
+    ];
+    public $search,$stage,$department,$subject,$class,$time,$today;
 
-    protected $listeners = ['stageChanged'];
     public function mount(){
         $this->departments = departments::all();
     }
     public function updatedstage(){
         $this->subjects = subjects::where([['id_department',$this->department],['id_stage' , $this->stage]])->get();
-    }
-    public function submit(){
-        $this->students = students::where([
-            ['id_department',$this->department],
-            ['id_stage' , $this->stage],
-            ['id_class' , $this->class],
-            ['id_time' , $this->time]
-            ])->get();
     }
     public function mark($id_student,$currentValue , $up){
         marks::updateOrcreate([
@@ -40,20 +47,26 @@ class Welcome extends Component
     public function attendance($id_student){
         attendance::create([
             'id_student' => $id_student,
-            'id_subject' => 1,
-            'at' => now(),
+            'id_subject' => $this->subject,
+            'at' => $this->today ?? now()->format('Y-m-d'),
         ]);
     }
     public function removeLastAttendance($id_student){
         attendance::where([
             ['id_student' , $id_student],
-            ['id_subject' , 1],
-            ['at' , '<' , now()->subMinute()],
+            ['id_subject' , $this->subject],
+            ['at' ,  $this->today ?? now()->format('Y-m-d')],
         ])->delete();
     }
     public function render()
     {
-        $this->students = students::get();
+        $this->students = students::where([
+            ['name' , 'LIKE' , '%'.$this->search.'%'],
+            ['id_department',$this->department],
+            ['id_stage' , $this->stage],
+            ['id_class' , $this->class],
+            ['id_time' , $this->time]
+            ])->get();
         return view('welcome')->extends('layouts.app');
     }
 }

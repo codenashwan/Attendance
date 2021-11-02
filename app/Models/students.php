@@ -16,7 +16,7 @@ class students extends Model
     public function attendances($id_subject){
         return $this->hasMany('App\Models\attendance' ,'id_student','id')->where('id_subject' , $id_subject);
     }
-    public function nowattendance($id_subject){
-        return $this->hasOne('App\Models\attendance' ,'id_student','id')->where([['id_subject' , $id_subject],['at' , '<' , now()->subMinute()]])->exists();
+    public function nowattendance($id_subject, $today){
+        return $this->hasOne('App\Models\attendance' ,'id_student','id')->where([['id_subject' , $id_subject],['at' , $today]])->exists();
     }
 }

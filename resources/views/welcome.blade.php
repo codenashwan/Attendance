@@ -6,7 +6,7 @@
 
         <div class="col-lg-7 col-12 p-2">
             <h3 class="fw-bolder my-3"><i class="bi bi-card-checklist mx-2"></i> Attendance System For Teacher</h3>
-            <form wire:submit.prevent="submit" class="d-flex flex-wrap">
+            <div class="d-flex flex-wrap">
                 @component('components.form.select', [
                 'icon' => 'building',
                 'model' => 'department',
@@ -16,8 +16,7 @@
                 @component('components.form.select', [
                 'icon' => 'sort-down-alt',
                 'model' => 'stage',
-                'array' => $department ? $stages : [],
-                'ODA' => true,
+                'array' => $stages,
                 ])
                 @endcomponent
                 @component('components.form.select', [
@@ -30,7 +29,6 @@
                 'icon' => 'bezier2',
                 'model' => 'class',
                 'array' => $subject ? $classes : [],
-                'ODA' => true,
                 ])
                 @endcomponent
                 @component('components.form.select', [
@@ -46,14 +44,20 @@
                 ])
                 @endcomponent
                 <div class="col-12 p-2">
-                    <button class="btn btn-primary mx-2 shadow btn-lg">Start Attendance</button>
                     <button class="btn btn-dark mx-2 shadow btn-lg">Insert Students</button>
                 </div>
-            </form>
+            </div>
 
-            @if(count($students) > 0)
+            {{-- @if(count($students) > 0) --}}
             <hr class="my-5">
             <h3>Result Students</h3>
+            @component('components.form.input', [
+                'icon' => 'search',
+                'model' => 'search',
+                'type' => 'search',
+                ])
+                @endcomponent
+
             <table class="table bg-white table-borderless table-hover table-lg">
                 <thead>
                   <tr class="text-center">
@@ -72,23 +76,23 @@
                       <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`1`)" class="point badge text-success border rounded-circle mx-3">+</span>
                     </th>
                     <td>{{ $student->name }}</td>
-                    <td class="border point {{  $student->nowattendance(1) ? "bg-danger text-white" : ""}}"
-                      @if($student->nowattendance(1))
+                    <td class="border point {{  $student->nowattendance($subject,$today) ? "bg-danger text-white" : ""}}"
+                      @if($student->nowattendance($subject , $today))
                       wire:click="removeLastAttendance(`{{ $student->id }}`)"
                       @else 
                       wire:click="attendance(`{{ $student->id }}`)"
                       @endif
                       >
-                      <i class="bi bi-{{  $student->nowattendance(1) ? "x-lg" : ""}}"></i>
+                      <i class="bi bi-{{  $student->nowattendance($subject,$today) ? "x-lg" : ""}}"></i>
                     </td>
                     <td class="text-danger">
-                      {{ $student->attendances(1)->count() }}
+                      {{ $student->attendances($subject)->count() }}
                     </td>
                   </tr>
                   @endforeach
                 </tbody>
               </table>
-              @endif
+              {{-- @endif --}}
         </div>
     </div>
 </div>
