@@ -2,16 +2,16 @@
     <div class="d-flex flex-wrap">
         <div class="col-lg-5 d-lg-block d-none vh-100 position-relative">
             <img src="{{ asset('assets/img/bg.jpg') }}" class="p-2 rounded-3 img-fluid h-100 w-100 cover">
-
-            <div class="centered glass border border-white pt-3" style="width: 500px;height:500px">
-                <span class="p-2 text-dark fs-3 fw-bolder"><i class="bi bi-file-text mx-2"></i>Attendance System</span>
-                <p class="p-2 fw-bold">
+            <div class="centered glass border border-white pt-3 col-lg-7 col-12 p-2 " style="height:500px">
+                <span class="text-dark fs-4 fw-bolder"><i class="bi bi-file-text mx-2"></i>Attendance System</span>
+<hr>
+                <p class="fw-bold">
                     Attendance is the concept of people, individually or as a group, appearing at a location for a
                     previously scheduled event. Measuring attendance is a significant concern for many organizations,
                     which can use such information to gauge the effectiveness of their efforts and to plan for future
                     efforts. Wikipedia
                 </p>
-                <p class="p-2 fw-bolder">Powered By Rstacode.</p>
+                <p class="fw-bolder">Powered By Rstacode.</p>
                 <div class="d-flex">
                   <a href="https://www.paypal.me/codenashwan" class="mx-2 text-dark"><i class="bi bi-cup-straw"></i></a>
                   <a href="https://www.github.com/codenashwan" class="mx-2 text-dark"><i class="bi bi-github"></i></a>
@@ -62,7 +62,6 @@
                     <button class="btn btn-dark mx-2 shadow btn-lg">Insert Students</button>
                 </div>
             </div>
-
             <div style="height: 647px" class="overflow-scroll">
             <hr class="my-5">
             <h3>Result Students ({{ $students->count() }})</h3>
@@ -73,7 +72,7 @@
             ])
             @endcomponent
 
-            <table wire:ignore.self class="table bg-white table-borderless table-hover table-lg">
+            <table class="table bg-white table-borderless table-hover table-lg">
                 <thead>
                     <tr class="text-center">
                         <th scope="col">Mark</th>
@@ -102,8 +101,9 @@
                             >
                             <i class="bi bi-{{  $student->nowattendance($subject,$today) ? "x-lg" : ""}}"></i>
                         </td>
-                        <td class="text-danger">
-                            {{ $student->attendances($subject)->count() }}
+                        
+                        <td class="text-danger" title="{{ $student->attendances($subject)->count() > 0 ? $student->ShowAllAttendances($subject)  : "0"}}">
+                           {{ $student->attendances($subject)->count() }}
                         </td>
                     </tr>
                     @endforeach
