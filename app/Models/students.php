@@ -24,7 +24,7 @@ class students extends Model
         $arr = [];
         $attendances = attendance::where([['id_student' , $this->id] , ['id_subject'  , $id_subject]])->get();
         foreach ($attendances as $attendance){
-            $arr[] = $attendance->at;
+            $arr[] = $attendance->at->format('Y-M-d');
             continue;
         }
         return implode(" , " ,  $arr);
