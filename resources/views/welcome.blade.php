@@ -9,7 +9,7 @@
                     Attendance is the concept of people, individually or as a group, appearing at a location for a
                     previously scheduled event. Measuring attendance is a significant concern for many organizations,
                     which can use such information to gauge the effectiveness of their efforts and to plan for future
-                    efforts. Wikipedia
+                    efforts.
                 </p>
                 <p class="fw-bolder">Powered By Rstacode.</p>
                 <div class="d-flex">
