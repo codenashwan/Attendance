@@ -1,27 +1,9 @@
 <div>
     <div class="d-flex flex-wrap">
-        <div class="col-lg-5 d-lg-block d-none vh-100 position-relative">
-            <img src="{{ asset('assets/img/bg.jpg') }}" class="p-2 rounded-3 img-fluid h-100 w-100 cover">
-            <div class="centered glass border border-white pt-3 col-lg-7 col-12 p-2 " style="height:500px">
-                <span class="text-dark fs-4 fw-bolder"><i class="bi bi-file-text mx-2"></i>Attendance System</span>
-<hr>
-                <p class="fw-bold">
-                    Attendance is the concept of people, individually or as a group, appearing at a location for a
-                    previously scheduled event. Measuring attendance is a significant concern for many organizations,
-                    which can use such information to gauge the effectiveness of their efforts and to plan for future
-                    efforts.
-                </p>
-                <p class="fw-bolder">Powered By Rstacode.</p>
-                <div class="d-flex">
-                  <a href="https://www.paypal.me/codenashwan" class="mx-2 text-dark"><i class="bi bi-cup-straw"></i></a>
-                  <a href="https://www.github.com/codenashwan" class="mx-2 text-dark"><i class="bi bi-github"></i></a>
-                </div>
-            </div>
-        </div>
-
+        @include('components.content.about')
         <div class="col-lg-7 col-12 p-2">
-            <h3 class="fw-bolder my-3"><i class="bi bi-file-text mx-2"></i> Attendance System For Teacher</h3>
-            <div class="d-flex flex-wrap">
+            <h3 class="fw-bolder my-3"> <span wire:click="$toggle('hideOne' , true)" class="point"> {{ $hideOne ? "+" : "-" }} </span> <i class="bi bi-file-text mx-2"></i> Attendance System For Teacher</h3>
+            <div class="{{ $hideOne ? "d-none" : "d-flex flex-wrap" }}">
                 @component('components.form.select', [
                 'icon' => 'building',
                 'model' => 'department',
@@ -58,57 +40,76 @@
                 'type' => 'date',
                 ])
                 @endcomponent
-                <div class="col-12 p-2">
-                    <button class="btn btn-dark mx-2 shadow btn-lg">Insert Students</button>
-                </div>
             </div>
-            <div style="height: 647px" class="overflow-scroll">
-            <hr class="my-5">
-            <h3>Result Students ({{ $students->count() }})</h3>
-            @component('components.form.input', [
-            'icon' => 'search',
-            'model' => 'search',
-            'type' => 'search',
-            ])
-            @endcomponent
+            <div class="col-12">
 
-            <table class="table bg-white table-borderless table-hover table-lg">
-                <thead>
-                    <tr class="text-center">
-                        <th scope="col">Mark</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Today</th>
-                        <th scope="col">Total Attendance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($students as $student)
-                    <tr class="text-center">
-                        <th>
-                            <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`0`)"
-                                class="point badge text-danger border rounded-circle mx-3">-</span>
-                            {{ $student->mark->value  ?? "0"}}
-                            <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`1`)"
-                                class="point badge text-success border rounded-circle mx-3">+</span>
-                        </th>
-                        <td>{{ $student->name }}</td>
-                        <td class="border point {{  $student->nowattendance($subject,$today) ? "bg-danger text-white" : ""}}"
-                            @if($student->nowattendance($subject , $today))
-                            wire:click="removeLastAttendance(`{{ $student->id }}`)"
-                            @else
-                            wire:click="attendance(`{{ $student->id }}`)"
-                            @endif
-                            >
-                            <i class="bi bi-{{  $student->nowattendance($subject,$today) ? "x-lg" : ""}}"></i>
-                        </td>
-                        
-                        <td class="text-danger" title="{{ $student->attendances($subject)->count() > 0 ? $student->ShowAllAttendances($subject)  : "0"}}">
-                           {{ $student->attendances($subject)->count() }}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                <h3 class="fw-bolder my-3"> <span wire:click="$toggle('hideTwo' , true)" class="point"> {{ $hideTwo ? "+" : "-" }} </span> <i class="bi bi-person-plus mx-2"></i> Create Student</h3>
+
+                <form wire:submit.prevent="newStudent" class="{{ $hideTwo ? "d-none" : "" }}">
+                    <div class="d-flex">
+                        @component('components.form.input', [
+                        'icon' => 'person-plus',
+                        'model' => 'name',
+                        'type' => 'text',
+                        ])
+                        @endcomponent
+                        <div class="col-lg-4 col-12 p-2">
+                            <button class="btn btn-dark rounded-0 btn-lg mb-3">Insert Student</button>
+                        </div>
+                    </div>
+                    @if($errors->any())
+                    {!! implode('', $errors->all('<span class="badge bg-white rounded-3 p-2 text-danger border m-1">:message</span>')) !!}
+                    @endif
+                </form>
+            </div>
+            <hr>
+            <div style="height: 647px" class="overflow-scroll mt-3">
+                <h3>Result Students ({{ $students->count() }})</h3>
+                @component('components.form.input', [
+                'icon' => 'search',
+                'model' => 'search',
+                'type' => 'search',
+                ])
+                @endcomponent
+
+                <table class="table bg-white table-borderless table-hover table-lg">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">Mark</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Today</th>
+                            <th scope="col">Total Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($students as $student)
+                        <tr class="text-center">
+                            <th>
+                                <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`0`)"
+                                    class="point badge text-danger border rounded-circle mx-3">-</span>
+                                {{ $student->mark->value  ?? "0"}}
+                                <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`1`)"
+                                    class="point badge text-success border rounded-circle mx-3">+</span>
+                            </th>
+                            <td>{{ $student->name }}</td>
+                            <td class="border point {{  $student->nowattendance($subject,$today) ? "bg-danger text-white" : ""}}"
+                                @if($student->nowattendance($subject , $today))
+                                wire:click="removeLastAttendance(`{{ $student->id }}`)"
+                                @else
+                                wire:click="attendance(`{{ $student->id }}`)"
+                                @endif
+                                >
+                                <i class="bi bi-{{  $student->nowattendance($subject,$today) ? "x-lg" : ""}}"></i>
+                            </td>
+
+                            <td class="text-danger"
+                                title="{{ $student->attendances($subject)->count() > 0 ? $student->ShowAllAttendances($subject)  : "0"}}">
+                                {{ $student->attendances($subject)->count() }}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

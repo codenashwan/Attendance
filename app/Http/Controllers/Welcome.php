@@ -29,6 +29,9 @@ class Welcome extends Component
         ['name' => 'Evening','id' => 2]
     ];
     public $search,$stage,$department,$subject,$class,$time,$today;
+    public $name;
+    public $hideOne = true,$hideTwo = true;
+
 
     public function mount(){
         $this->departments = departments::all();
@@ -57,6 +60,26 @@ class Welcome extends Component
             ['id_subject' , $this->subject],
             ['at' ,  $this->today ?? now()->format('Y-m-d')],
         ])->delete();
+    }
+
+    public function newStudent(){
+        $validator = $this->validate([
+            'name' => 'required',
+            'department' => 'required',
+            'stage' => 'required',
+            'class' => 'required',
+            'time' => 'required',
+        ]);
+      
+        students::create([
+            'name' => $this->name,
+            'id_department' => $this->department,
+            'id_stage' => $this->stage,
+            'id_class' => $this->class,
+            'id_time' => $this->time,
+        ]);
+        notyf()->livewire()->dismissible(true)->addSuccess('notification using sweetalert library');
+        $this->reset('name');
     }
     public function render()
     {

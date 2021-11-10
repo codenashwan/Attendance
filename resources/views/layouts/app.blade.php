@@ -13,6 +13,8 @@
 </head>
 <body>
     @yield('content')
+    @flasher_render
+    @flasher_livewire_render
     @livewireScripts
     <script type="module">
         import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
