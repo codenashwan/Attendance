@@ -42,9 +42,7 @@
                 @endcomponent
             </div>
             <div class="col-12">
-
                 <h3 class="fw-bolder my-3"> <span wire:click="$toggle('hideTwo' , true)" class="point"> {{ $hideTwo ? "+" : "-" }} </span> <i class="bi bi-person-plus mx-2"></i> Create Student</h3>
-
                 <form wire:submit.prevent="newStudent" class="{{ $hideTwo ? "d-none" : "" }}">
                     <div class="d-flex">
                         @component('components.form.input', [
@@ -87,7 +85,7 @@
                             <th>
                                 <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`0`)"
                                     class="point badge text-danger border rounded-circle mx-3">-</span>
-                                {{ $student->mark->value  ?? "0"}}
+                                <input wire:model.defer="calc" wire:keydown.enter="calc(`{{ $student->id }}`)" type="text" width="65px" class="border border-light rounded-3 text-center" placeholder="{{ $student->mark->value  ?? "0"}}">
                                 <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`1`)"
                                     class="point badge text-success border rounded-circle mx-3">+</span>
                             </th>

@@ -31,13 +31,25 @@ class Welcome extends Component
     public $search,$stage,$department,$subject,$class,$time,$today;
     public $name;
     public $hideOne = true,$hideTwo = true;
-
+    public $calc;
 
     public function mount(){
         $this->departments = departments::all();
     }
     public function updatedstage(){
         $this->subjects = subjects::where([['id_department',$this->department],['id_stage' , $this->stage]])->get();
+    }
+    public function calc($id){
+        $mark =  marks::where([['id_student',$id],['id_subject',$this->subject]])->first();
+        $operator = substr($this->calc,0,1);
+        $value = mb_substr($this->calc,1);
+        if($mark){
+        $mark->value = $operator == '+' ? $mark->value + $value : $mark->value - $value;
+        $mark->save();
+        }else{
+        $this->mark($id , $value , 1);
+        }
+        $this->reset('calc');
     }
     public function mark($id_student,$currentValue , $up){
         marks::updateOrcreate([
