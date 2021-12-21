@@ -47,7 +47,7 @@ class Welcome extends Component
         $mark->value = $operator == '+' ? $mark->value + $value : $mark->value - $value;
         $mark->save();
         }else{
-        $this->mark($id , $value , 1);
+        $this->mark($id , $value-1 , 1);
         }
         $this->reset('calc');
     }
