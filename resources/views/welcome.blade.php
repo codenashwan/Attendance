@@ -75,8 +75,10 @@
                         <tr class="text-center">
                             <th scope="col">Mark</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Today</th>
+                            <th scope="col">Attendance</th>
+                            <th scope="col">Vacation</th>
                             <th scope="col">Total Attendance</th>
+                            <th scope="col">Total Vacation</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,10 +101,22 @@
                                 >
                                 <i class="bi bi-{{  $student->nowattendance($subject,$today) ? "x-lg" : ""}}"></i>
                             </td>
-
+                            <td class="border point {{  $student->nowattendance($subject,$today,1) ? "bg-warning text-white" : ""}}"
+                                @if($student->nowattendance($subject , $today,1))
+                                wire:click="removeLastAttendance(`{{ $student->id }}` , 1)"
+                                @else
+                                wire:click="attendance(`{{ $student->id }}`,1)"
+                                @endif
+                                >
+                                <i class="bi bi-{{  $student->nowattendance($subject,$today,1) ? "box-arrow-in-up-right" : ""}}"></i>
+                            </td>
                             <td class="text-danger"
                                 title="{{ $student->attendances($subject)->count() > 0 ? $student->ShowAllAttendances($subject)  : "0"}}">
                                 {{ $student->attendances($subject)->count() }}
+                            </td>
+                            <td class="text-danger"
+                                title="{{ $student->attendances($subject,1)->count() > 0 ? $student->ShowAllAttendances($subject,1)  : "0"}}">
+                                {{ $student->attendances($subject,1)->count() }}
                             </td>
                         </tr>
                         @endforeach

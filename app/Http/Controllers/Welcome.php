@@ -59,15 +59,17 @@ class Welcome extends Component
             'value'=> $currentValue + ($up ? 1 : -1),
         ]);
     }
-    public function attendance($id_student){
+    public function attendance($id_student,$type =null){
         attendance::create([
+            'type' => $type,
             'id_student' => $id_student,
             'id_subject' => $this->subject,
             'at' => $this->today ?? now()->format('Y-m-d'),
         ]);
     }
-    public function removeLastAttendance($id_student){
+    public function removeLastAttendance($id_student , $type =null){
         attendance::where([
+            ['type' , $type],
             ['id_student' , $id_student],
             ['id_subject' , $this->subject],
             ['at' ,  $this->today ?? now()->format('Y-m-d')],
