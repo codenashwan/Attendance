@@ -95,6 +95,12 @@ class Welcome extends Component
         notyf()->livewire()->dismissible(true)->addSuccess('notification using sweetalert library');
         $this->reset('name');
     }
+    public $first_term_mark_20;
+    public function first_term_mark_20(students $student){
+        $student->first_term_mark_20 = $this->first_term_mark_20;
+        $student->save();
+        $this->reset('first_term_mark_20');
+    }
     public function render()
     {
         $this->students = students::where([

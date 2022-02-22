@@ -30,5 +30,11 @@ class students extends Model
         }
         return implode(" , " ,  $arr);
     }
+
+    public function emoji(){
+        if($this->first_term_mark_20 >= 18){
+            return " 🎉 ";
+        }
+    }
   
 }

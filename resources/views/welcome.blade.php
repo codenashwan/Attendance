@@ -1,8 +1,6 @@
-<div>
-    <div class="d-flex flex-wrap">
-        @include('components.content.about')
-        <div class="col-lg-7 col-12 p-2">
-            <h3 class="fw-bolder my-3"> <span wire:click="$toggle('hideOne' , true)" class="point"> {{ $hideOne ? "+" : "-" }} </span> <i class="bi bi-file-text mx-2"></i> Attendance System For Teacher</h3>
+<div class="p-3">
+    <div>
+            <h3 class="fw-bolder my-3"> <span wire:click="$toggle('hideOne' , true)" class="point"> {{ $hideOne ? "+" : "-" }} </span> <i class="bi bi-file-text mx-2"></i> Attendance System For Teacher</h3> 
             <div class="{{ $hideOne ? "d-none" : "d-flex flex-wrap" }}">
                 @component('components.form.select', [
                 'icon' => 'building',
@@ -61,7 +59,7 @@
                 </form>
             </div>
             <hr>
-            <div style="height: 647px" class="overflow-scroll mt-3">
+            <div class="mt-3">
                 <h3>Result Students ({{ $students->count() }})</h3>
                 @component('components.form.input', [
                 'icon' => 'search',
@@ -72,9 +70,10 @@
 
                 <table class="table bg-white table-borderless table-hover table-lg">
                     <thead>
-                        <tr class="text-center">
-                            <th scope="col">Mark</th>
-                            <th scope="col">Name</th>
+                        <tr class="text-center bg-warning">
+                            <th scope="col" dir="rtl">5 نمرەی ڕۆژانە</th>
+                            <th scope="col" dir="rtl">20 نمرەی ئیمتیحان</th>
+                            <th scope="col">ناوی سیانی</th>
                             <th scope="col">Attendance</th>
                             <th scope="col">Vacation</th>
                             <th scope="col">Total Attendance</th>
@@ -85,11 +84,13 @@
                         @foreach ($students as $student)
                         <tr class="text-center">
                             <th>
-                                <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`0`)"
-                                    class="point badge text-danger border rounded-circle mx-3">-</span>
+                                <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`0`)" class="point badge text-danger border rounded-circle mx-3">-</span>
                                 <input wire:model.defer="calc" wire:keydown.enter="calc(`{{ $student->id }}`)" type="text" width="65px" class="border border-light rounded-3 text-center" placeholder="{{ $student->mark->value  ?? "0"}}">
-                                <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`1`)"
-                                    class="point badge text-success border rounded-circle mx-3">+</span>
+                                <span wire:click="mark(`{{ $student->id }}`, `{{ $student->mark->value ?? 0 }}`,`1`)" class="point badge text-success border rounded-circle mx-3">+</span>
+                            </th>
+                            <th>
+                                
+                                <input wire:model.defer="first_term_mark_20" wire:keydown.enter="first_term_mark_20(`{{ $student->id }}`)" type="text" width="65px" class="border border-light rounded-3 text-center" placeholder="{{ $student->emoji().$student->first_term_mark_20  ?? "0"}}">
                             </th>
                             <td>{{ $student->name }}</td>
                             <td class="border point {{  $student->nowattendance($subject,$today) ? "bg-danger text-white" : ""}}"
@@ -110,19 +111,16 @@
                                 >
                                 <i class="bi bi-{{  $student->nowattendance($subject,$today,1) ? "box-arrow-in-up-right" : ""}}"></i>
                             </td>
-                            <td class="text-danger"
-                                title="{{ $student->attendances($subject)->count() > 0 ? $student->ShowAllAttendances($subject)  : "0"}}">
+                            <td class="text-danger" title="{{ $student->attendances($subject)->count() > 0 ? $student->ShowAllAttendances($subject)  : "0"}}">
                                 {{ $student->attendances($subject)->count() }}
                             </td>
-                            <td class="text-danger"
-                                title="{{ $student->attendances($subject,1)->count() > 0 ? $student->ShowAllAttendances($subject,1)  : "0"}}">
+                            <td class="text-danger" title="{{ $student->attendances($subject,1)->count() > 0 ? $student->ShowAllAttendances($subject,1)  : "0"}}">
                                 {{ $student->attendances($subject,1)->count() }}
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-            </div>
         </div>
     </div>
 </div>
